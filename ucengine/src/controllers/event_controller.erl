@@ -195,6 +195,17 @@ live(Domain, [Meeting],
                                   Parent,
                                   Sid,
                                   PreviousEvents);
+        "websocket" ->
+            uce_async_ws:wait(Response,
+                              Domain,
+                              Uid,
+                              Meeting,
+                              Keywords,
+                              From,
+                              Types,
+                              Parent,
+                              Sid,
+                              PreviousEvents);
         _ ->
             {error, bad_parameters}
     end.

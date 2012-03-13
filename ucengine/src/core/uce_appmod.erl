@@ -74,7 +74,7 @@ out(#arg{} = Arg) ->
         %% normal response
         #uce_response{status=Status, content=Content, headers=Headers} ->
             Headers ++ [{status, Status}, Content];
-        %% in case of multipart
+        %% in case of multipart or websocket
         Other ->
             Other
     end.
