@@ -1,6 +1,6 @@
 %%
 %%  U.C.Engine - Unified Collaboration Engine
-%%  Copyright (C) 2011 af83
+%%  Copyright (C) 2012 Stormz
 %%
 %%  This program is free software: you can redistribute it and/or modify
 %%  it under the terms of the GNU Affero General Public License as published by
