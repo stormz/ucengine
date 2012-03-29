@@ -23,7 +23,7 @@
 
 -export([wait/10]).
 
--export([handle_message/1, handle_message/2]).
+-export([handle_message/1, handle_open/1]).
 
 -export([init/1,
          code_change/3,
@@ -39,7 +39,7 @@ wait(_Response, Domain, Uid, Location, Search, From, Types, Parent, Sid, Previou
     Opts = [{origin, "http://192.168.1.12"}],
     {websocket, ?MODULE, Opts, [Domain, Uid, Location, Search, From, Types, Parent, Sid, PreviousEvents]}.
 
-handle_message(open, [Domain, Uid, Location, Search, From, Types, Parent, Sid, PreviousEvents]) ->
+handle_open([Domain, Uid, Location, Search, From, Types, Parent, Sid, PreviousEvents]) ->
     YawsPid = self(),
     {ok, _Pid} = gen_server:start_link(?MODULE, [YawsPid, Domain, Uid, Location, Search, From, Types, Parent, Sid, PreviousEvents], []),
     noreply.
