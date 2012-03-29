@@ -17,11 +17,11 @@
 %%
 -module(uce_async_lp).
 
--export([wait/9]).
+-export([wait/11]).
 
 -include("uce.hrl").
 
-wait(Response, Domain, Uid, Location, Search, From, Types, Parent, []) ->
+wait(_Request, Response, Domain, Uid, Location, Search, From, Types, Parent, _Sid, []) ->
     Self = self(),
     spawn(fun() ->
                   uce_meeting:subscribe(self(), Domain, Uid, Location, From, Types, Parent),
@@ -46,5 +46,5 @@ wait(Response, Domain, Uid, Location, Search, From, Types, Parent, []) ->
                   uce_meeting:unsubscribe(self())
           end),
     Response#uce_response{status=200, content={streamcontent_with_timeout, "application/json", <<>>, infinity}};
-wait(Response, Domain, _Uid, _Location, _Search, _From, _Types, _Parent, PreviousEvents) ->
+wait(_Request, Response, Domain, _Uid, _Location, _Search, _From, _Types, _Parent, _Sid, PreviousEvents) ->
     json_helpers:json(Response, Domain, PreviousEvents).

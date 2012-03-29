@@ -173,42 +173,34 @@ live(Domain, [Meeting],
                                           Types,
                                           Start,
                                           Parent),
-    case Mode of
-        "longpolling" ->
-            uce_async_lp:wait(Response,
-                              Domain,
-                              Uid,
-                              Meeting,
-                              Keywords,
-                              From,
-                              Types,
-                              Parent,
-                              PreviousEvents);
-        "eventsource" ->
-            uce_async_stream:wait(Response,
-                                  Domain,
-                                  Uid,
-                                  Meeting,
-                                  Keywords,
-                                  From,
-                                  Types,
-                                  Parent,
-                                  Sid,
-                                  PreviousEvents);
-        "websocket" ->
-            uce_async_ws:wait(Response,
-                              Domain,
-                              Uid,
-                              Meeting,
-                              Keywords,
-                              From,
-                              Types,
-                              Parent,
-                              Sid,
-                              PreviousEvents);
-        _ ->
-            {error, bad_parameters}
+    Module = case Mode of
+                 "longpolling" ->
+                     uce_async;
+                 "eventsource" ->
+                     uce_async_stream;
+                 "websocket" ->
+                     io:format("websocket connection~n"),
+                     uce_async_ws;
+                 _ ->
+                     error
+             end,
+    case Module of
+        error ->
+            {error, bad_parameters};
+        _Mod ->
+            Module:wait(Request,
+                        Response,
+                        Domain,
+                        Uid,
+                        Meeting,
+                        Keywords,
+                        From,
+                        Types,
+                        Parent,
+                        Sid,
+                        PreviousEvents)
     end.
+
 
 get_last_event_id(#uce_request{arg=Arg}) ->
     Header = "Last-Event-Id",

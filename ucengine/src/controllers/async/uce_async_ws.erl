@@ -21,9 +21,7 @@
 
 -behaviour(gen_server).
 
--export([wait/10]).
-
--export([handle_message/1, handle_open/1]).
+-export([wait/11, handle_open/1, handle_message/1]).
 
 -export([init/1,
          code_change/3,
@@ -35,8 +33,8 @@
 %
 % Public API
 %
-wait(_Response, Domain, Uid, Location, Search, From, Types, Parent, Sid, PreviousEvents) ->
-    Opts = [{origin, "http://192.168.1.12"}],
+wait(Request, _Response, Domain, Uid, Location, Search, From, Types, Parent, Sid, PreviousEvents) ->
+    Opts = [{origin, "http://"++ Request#uce_request.domain}],
     {websocket, ?MODULE, Opts, [Domain, Uid, Location, Search, From, Types, Parent, Sid, PreviousEvents]}.
 
 handle_open([Domain, Uid, Location, Search, From, Types, Parent, Sid, PreviousEvents]) ->
