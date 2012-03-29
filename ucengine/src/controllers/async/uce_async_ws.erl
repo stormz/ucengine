@@ -52,7 +52,7 @@ handle_message(_) ->
 init([YawsPid, Domain, Uid, Location, Search, From, Types, Parent, Sid, PreviousEvents]) ->
     process_flag(trap_exit, true),
     link(YawsPid),
-    %send_events(YawsPid, Domain, PreviousEvents),
+    send_events(YawsPid, Domain, PreviousEvents),
     uce_meeting:subscribe(self(), Domain, Uid, Location, From, Types, Parent),
     uce_presence:add_stream(Domain, Sid),
     {ok, {YawsPid,
@@ -92,7 +92,6 @@ terminate(_Reason, {_, Domain, _, Sid}) ->
 
 send_events(_, _, []) ->
     ok;
-send_events(YawsPid, Domain, [#uce_event{datetime=Datetime} = Event|Events]) ->
+send_events(YawsPid, Domain, [Event|Events]) ->
     yaws_api:websocket_send(YawsPid, {text, list_to_binary(mochijson:encode(json_helpers:to_json(Domain, Event)))}),
-    %yaws_api:stream_chunk_deliver(YawsPid, integer_to_list(Datetime)),
     send_events(YawsPid, Domain, Events).
