@@ -179,7 +179,6 @@ live(Domain, [Meeting],
                  "eventsource" ->
                      uce_async_stream;
                  "websocket" ->
-                     io:format("websocket connection~n"),
                      uce_async_ws;
                  _ ->
                      error
