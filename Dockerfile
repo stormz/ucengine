@@ -22,7 +22,7 @@ VOLUME /data
 
 RUN buildDeps='make git'; \
     set -x \
-    && apt-get update && apt-get install -y $buildDeps --no-install-recommends \
+    && apt-get install -y $buildDeps --no-install-recommends \
     && su ucengine -c "make rel" \
     && apt-get purge -y $buildDeps \
     && apt-get autoremove -y \
