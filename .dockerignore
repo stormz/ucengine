@@ -1,0 +1,9 @@
+.git
+ucengine/ebin/*
+*.log
+deps/*
+.eunit
+rel/ucengine/
+benchmarks/results
+utils/latency/*.csv
+.ucengine_dialyzer.plt
