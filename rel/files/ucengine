@@ -79,8 +79,13 @@ attach() {
 # Check the first argument for instructions
 case "$1" in
     run)
+        tail -F ${RUNNER_LOG_DIR}/run_erl.log \
+            ${RUNNER_LOG_DIR}/sasl-error.log \
+            ${RUNNER_LOG_DIR}/ucengine.log &
+        echo "Starting ucengine..."
         start
-        attach
+        child=$!
+        wait $child
         ;;
     start)
         start
