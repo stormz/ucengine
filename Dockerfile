@@ -8,7 +8,7 @@ ENV DEBCONF_NOWARNINGS yes
 ENV UCENGINE_USER ucengine
 ENV UCENGINE_ROOT /code
 ENV UCENGINE_REL_PATH ${UCENGINE_ROOT}/rel/ucengine
-ENV UCENGINE_PKGS openssl erlang erlang-yaws
+ENV UCENGINE_PKGS openssl erlang erlang-yaws netcat
 ENV UCENGINE_BUILD_PKGS make git
 
 RUN groupadd -r ${UCENGINE_USER} \
@@ -46,5 +46,8 @@ VOLUME ["${UCENGINE_REL_PATH}/etc"]
 EXPOSE 5280
 
 USER ${UCENGINE_USER}
+
+COPY docker-entrypoint.sh /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
 
 CMD ["./bin/ucengine", "run"]
