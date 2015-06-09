@@ -35,14 +35,10 @@ USER ${UCENGINE_USER}
 
 RUN make rel
 
-USER root
-
 WORKDIR ${UCENGINE_REL_PATH}
 
 VOLUME ["${UCENGINE_REL_PATH}/etc"]
 
 EXPOSE 5280
-
-USER ${UCENGINE_USER}
 
 CMD ["./bin/ucengine", "run"]
