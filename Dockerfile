@@ -37,8 +37,6 @@ RUN make rel
 
 WORKDIR ${UCENGINE_REL_PATH}
 
-VOLUME ["${UCENGINE_REL_PATH}/etc"]
-
 EXPOSE 5280
 
 CMD ["./bin/ucengine", "run"]
