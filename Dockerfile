@@ -1,4 +1,4 @@
-FROM debian:stable
+FROM debian:wheezy
 MAINTAINER Laurent Arnoud <laurent@spkdev.net>
 
 ENV DEBIAN_FRONTEND noninteractive
