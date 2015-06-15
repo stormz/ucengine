@@ -24,6 +24,8 @@ http://groups.google.com/group/ucengine
 
 ## License
 
+Copyright 2015, Stormz
+
 Copyright 2011, af83
 
 The default license for all files is AGPLv3 except wwwroot/ under MIT/GPLv2.
