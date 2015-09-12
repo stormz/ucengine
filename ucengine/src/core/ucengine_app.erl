@@ -33,7 +33,6 @@ start(_, _) ->
     start_apps([sasl, crypto, metrics, gproc, ibrowse]),
     mnesia:create_schema([node()|nodes()]),
     application:start(mnesia, permanent),
-    error_logger:tty(false),
 
     Arguments = init:get_arguments(),
     [[ConfigurationPath]] = utils:get(Arguments, [c], [["etc/uce.cfg"]]),
