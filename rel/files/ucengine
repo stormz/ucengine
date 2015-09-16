@@ -49,7 +49,32 @@ ERTS_PATH=$RUNNER_BASE_DIR/erts-$ERTS_VSN/bin
 # Setup command to control the node
 NODETOOL="$ERTS_PATH/escript $ERTS_PATH/nodetool $NAME_ARG $COOKIE_ARG"
 
-start() {
+# Check the first argument for instructions
+case "$1" in
+    run)
+        BOOTFILE=$SCRIPT
+        # Setup beam-required vars
+        ROOTDIR=$RUNNER_BASE_DIR
+        BINDIR=$ROOTDIR/erts-$ERTS_VSN/bin
+        EMU=beam
+        PROGNAME=`echo $0 | sed 's/.*\\///'`
+        CMD="$BINDIR/erlexec -noinput -boot $RUNNER_BASE_DIR/releases/$APP_VSN/$BOOTFILE -embedded -config $RUNNER_ETC_DIR/app.config -args_file $RUNNER_ETC_DIR/vm.args -- ${1+"$@"}"
+        export EMU
+        export ROOTDIR
+        export BINDIR
+        export PROGNAME
+
+        # Dump environment info for logging purposes
+        echo "Exec: $CMD"
+        echo "Root: $ROOTDIR"
+
+        # Log the startup
+        logger -t "$SCRIPT[$$]" "Starting up"
+
+        # Start the VM
+        exec $CMD
+        ;;
+    start)
         # Make sure there is not already a node running
         RES=`$NODETOOL ping`
         if [ "$RES" = "pong" ]; then
@@ -62,9 +87,9 @@ start() {
         # Note the trailing slash on $PIPE_DIR/
         $ERTS_PATH/run_erl -daemon $PIPE_DIR/ $RUNNER_LOG_DIR "exec $RUNNER_BASE_DIR/bin/$SCRIPT console" 2>&1
         echo "Node is started. Check status with $0 ping"
-}
+        ;;
 
-stop() {
+    stop)
         # Wait for the node to completely stop...
         case `uname -s` in
             Linux|Darwin|FreeBSD|DragonFly|NetBSD|OpenBSD)
@@ -87,39 +112,6 @@ stop() {
         do
             sleep 1
         done
-}
-
-trap stop SIGINT SIGTERM
-
-attach() {
-        # Make sure a node IS running
-        RES=`$NODETOOL ping`
-        if [ "$RES" != "pong" ]; then
-            echo "Node is not running!"
-            exit 1
-        fi
-
-        shift
-        $ERTS_PATH/to_erl $PIPE_DIR
-}
-
-# Check the first argument for instructions
-case "$1" in
-    run)
-        tail -F ${RUNNER_LOG_DIR}/run_erl.log \
-            ${RUNNER_LOG_DIR}/sasl-error.log \
-            ${RUNNER_LOG_DIR}/ucengine.log &
-        echo "Starting ucengine..."
-        start
-        child=$!
-        wait $child
-        ;;
-    start)
-        start
-        ;;
-
-    stop)
-        stop
         ;;
 
     restart)
@@ -138,7 +130,15 @@ case "$1" in
         ;;
 
     attach)
-        attach
+        # Make sure a node IS running
+        RES=`$NODETOOL ping`
+        if [ "$RES" != "pong" ]; then
+            echo "Node is not running!"
+            exit 1
+        fi
+
+        shift
+        $ERTS_PATH/to_erl $PIPE_DIR
         ;;
 
     console|console_clean)
