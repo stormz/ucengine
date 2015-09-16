@@ -30,7 +30,7 @@ child_spec() ->
                         [{servername, DefaultHost},
                          {listen, config:get(bind_ip)},
                          {port, config:get(port)},
-                         {access_log, true},
+                         {access_log, false},
                          {partial_post_size, nolimit},
                          {opaque, DefaultHost},
                          {appmods, [{"/api/" ++ ?VERSION, uce_appmod}]}],

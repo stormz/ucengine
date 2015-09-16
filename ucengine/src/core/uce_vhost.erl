@@ -174,6 +174,6 @@ setup_server(Vhost) ->
                      {listen, config:get(bind_ip)},
                      {port, config:get(port)},
                      {opaque, Vhost},
-                     {access_log, true},
+                     {access_log, false},
                      {partial_post_size, nolimit},
                      {appmods, [{"/api/" ++ ?VERSION, uce_appmod}]}]).
