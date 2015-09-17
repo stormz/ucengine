@@ -1,5 +1,5 @@
 FROM debian:wheezy
-MAINTAINER Laurent Arnoud <laurent@spkdev.net>
+MAINTAINER François de Metz <francois@2metz.fr>
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV DEBIAN_PRIORITY critical
